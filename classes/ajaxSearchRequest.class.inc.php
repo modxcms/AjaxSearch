@@ -455,8 +455,13 @@ class AjaxSearchRequest {
         if (isset($this->scCateg)) $orderFields[] = 'category ASC';
         if ($this->cfg['order']) {
             $order = array_map('trim',explode(',', $this->cfg['order']));
-            foreach ($order as $ord) $orderBy[] = $ord;
-            $orderFields[] = implode(',', $orderBy);
+            foreach ($order as $ord) {
+                $ordElt = explode(' ',$ord);
+                $ordby = '`' . $ordElt[0] . '`';
+                if (isset($ordElt[1]) && ($ordElt[1] == 'ASC' || $ordElt[1] == 'DESC')) $ordby .= ' ' . $ordElt[1];
+                $orderBy[] = $ordby;
+            }
+			$orderFields[] = implode(',', $orderBy);
         }
         if (count($orderFields) > 0) $orderByClause = implode(', ', $orderFields);
         else $orderByClause = '1';
