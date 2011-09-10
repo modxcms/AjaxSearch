@@ -403,7 +403,7 @@ class AjaxSearchRequest {
             if ($advSearch != NOWORDS) {
                 if (isset($this->scJoined)) foreach ($this->scJoined as $joined) {
                     $jpref = $joined['tb_alias'];
-                    foreach ($joined['searchable'] as $searchable) $hvg[] = '(' . $jpref . '_' . $searchable . $like . ')';
+                    if (isset($joined['searchable'])) foreach ($joined['searchable'] as $searchable) $hvg[] = '(' . $jpref . '_' . $searchable . $like . ')';
                 }
                 if (isset($this->scTvs['tvs'])) foreach ($this->scTvs['tvs'] as $scTv) {
                     $jpref = $scTv['tb_alias'];
@@ -413,7 +413,7 @@ class AjaxSearchRequest {
 
                 if (isset($this->scJoined)) foreach ($this->scJoined as $joined) {
                     $jpref = $joined['tb_alias'];
-                    foreach ($joined['searchable'] as $searchable) {
+                    if (isset($joined['searchable'])) foreach ($joined['searchable'] as $searchable) {
                         $hvg[] = '((' . $jpref . '_' . $searchable . $like . ') OR (' . $jpref . '_' . $searchable . ' IS NULL))';
                     }
                 }
@@ -506,7 +506,7 @@ class AjaxSearchRequest {
         if (($joined['tb_alias'] != 'tv')) {
             if ($searchString) {
                 $stw = $this->_getSearchTermsWhere($joined,$searchString,$advSearch);
-                if ($stw) $whl[] = '(' . $stw . ')';
+                if (!empty($stw)) $whl[] = '(' . $stw . ')';
             }
             if (count($whl)) {
                 $whereClause = '(' . implode(' AND ',$whl). ')';
@@ -555,24 +555,26 @@ class AjaxSearchRequest {
         return $where;
     }
     function _getSearchTermsWhere($joined,$searchString,$advSearch){
+		$whereClause = '';
+        if (!empty($joined['searchable'])) {
+			$like = $this->_getWhereForm($advSearch);
+			$whereOper = $this->_getWhereOper($advSearch);
+			$type = ($advSearch == 'allwords') ? 'oneword' : $advSearch;
+			$whereStringOper = $this->_getWhereStringOper($type);
 
-        $like = $this->_getWhereForm($advSearch);
-        $whereOper = $this->_getWhereOper($advSearch);
-        $type = ($advSearch == 'allwords') ? 'oneword' : $advSearch;
-        $whereStringOper = $this->_getWhereStringOper($type);
+			foreach($joined['searchable'] as $searchable) $whsc[] = '(' . $joined['tb_alias'] . '.' . $searchable . $like .')';
+			if (count($whsc)) {
+				$whereSubClause = implode($whereOper,$whsc);
 
-        if (isset($joined['searchable']))
-          foreach($joined['searchable'] as $searchable) $whsc[] = '(' . $joined['tb_alias'] . '.' . $searchable . $like .')';
-        if (count($whsc)) $whereSubClause = implode($whereOper,$whsc);
-        else $whereSubClause = '';
+				$search = array();
+				if ($advSearch == 'exactphrase') $search[] = $searchString;
+				else $search = explode(' ',$searchString);
 
-        $search = array();
-        if ($advSearch == 'exactphrase') $search[] = $searchString;
-        else $search = explode(' ',$searchString);
+				foreach($search as $searchTerm) $where[]=   preg_replace('/word/', preg_quote($searchTerm), $whereSubClause);
 
-        foreach($search as $searchTerm) $where[]=   preg_replace('/word/', preg_quote($searchTerm), $whereSubClause);
-
-        $whereClause = implode($whereStringOper,$where);
+				$whereClause = implode($whereStringOper,$where);
+			}
+		}
         return $whereClause;
     }
     function _getWhereForm($advSearch) {
