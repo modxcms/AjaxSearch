@@ -129,6 +129,7 @@ class AjaxSearchInput {
                 }
                 else {  // check the empty input field => error message (At least 3 characters)
                     $searchString = '';
+                    if ($asfSubmitted) $checkString = false; // no check if a filter is submitted
                 }
             }
             else if (($searchString == '') && ($this->asCfg->cfg['init'] == 'all')) {
