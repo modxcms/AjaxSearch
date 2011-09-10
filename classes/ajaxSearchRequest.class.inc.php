@@ -503,10 +503,16 @@ class AjaxSearchRequest {
             $whl[] = implode(' AND ', $where);
         }
 
-        if (($joined['tb_alias'] != 'tv') && ($searchString)) {
-            $whl[] = '(' . $this->_getSearchTermsWhere($joined,$searchString,$advSearch). ')';
-            $whereClause = '(' . implode(' AND ',$whl). ')';
-            $subSelect = 'SELECT DISTINCT ' . $fieldsClause . ' FROM ' . $fromClause . ' WHERE ' . $whereClause;
+        if (($joined['tb_alias'] != 'tv')) {
+            if ($searchString) {
+                $stw = $this->_getSearchTermsWhere($joined,$searchString,$advSearch);
+                if ($stw) $whl[] = '(' . $stw . ')';
+            }
+            if (count($whl)) {
+                $whereClause = '(' . implode(' AND ',$whl). ')';
+                $subSelect = 'SELECT DISTINCT ' . $fieldsClause . ' FROM ' . $fromClause . ' WHERE ' . $whereClause;
+            }
+            else $subSelect = 'SELECT DISTINCT ' . $fieldsClause . ' FROM ' . $fromClause;
         }
         else {
             $subSelect = 'SELECT DISTINCT ' . $fieldsClause . ' FROM ' . $fromClause;
