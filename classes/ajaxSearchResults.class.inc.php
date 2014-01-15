@@ -4,9 +4,9 @@
 * -----------------------------------------------------------------------------
 * @package  AjaxSearchResults
 *
-* @author       Coroico - www.modx.wangba.fr
-* @version      1.9.2
-* @date         05/10/2010
+* @author       Coroico - www.evo.wangba.fr
+* @version      1.9.3
+* @date         26/09/2012
 *
 * Purpose:
 *    The AjaxSearchResults class contains all functions and data used to manage Results
@@ -859,7 +859,7 @@ class AjaxSearchResults {
         return $Ids;
     }
     /*
-    *  Filter the search results when the search terms are found inside HTML or MODx tags
+    *  Filter the search results when the search terms are found inside HTML or MODX tags
     */
     function _doFilterTags($results, $searchString, $advSearch) {
         $filteredResults = array();
@@ -950,12 +950,14 @@ class AjaxSearchResults {
     * Default ouput strip function
     */
     function defaultStripOutput($text) {
+        global $modx;
+
         if ($text !== '') {
             // $text = $modx->parseDocumentSource($text); // parse document
 
             $text = $this->stripLineBreaking($text);
 
-            $text = $this->stripTags($text);
+            $text = $modx->stripTags($text);
 
             $text = $this->stripJscripts($text);
 
@@ -972,7 +974,7 @@ class AjaxSearchResults {
         return $text;
     }
     /*
-    *  stripTags : Remove MODx sensitive tags
+    *  stripTags : Remove MODX sensitive tags
     */
     function stripTags($text) {
 
