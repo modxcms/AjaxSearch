@@ -79,7 +79,9 @@ class AjaxSearchLog {
           `ip` varchar(255) NOT NULL,
           PRIMARY KEY  (`id`)
           ) ENGINE=MyISAM;";
-            $modx->db->query($SQL_CREATE_TABLE);
+            if (!$modx->db->query($SQL_CREATE_TABLE)) {
+                return false;
+            }
             return true;
         }
     }
