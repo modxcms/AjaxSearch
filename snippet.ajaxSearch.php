@@ -389,7 +389,7 @@ if ($cfg['ajaxSearch']) {
     $cfg['addJscript'] = isset($addJscript) ? $addJscript : (isset($__addJscript) ? $__addJscript : $dcfg['addJscript']);
 
     // &jsMooTools - Location of the mootools javascript library (current version of MODX)
-    // Default: MGR_DIR.'media/script/mootools/mootools.js'
+    // Default: MGR_DIR.'/media/script/mootools/mootools.js'
     $cfg['jsMooTools'] = isset($jsMooTools) ? $jsMooTools : (isset($__jsMooTools) ? $__jsMooTools : $dcfg['jsMooTools']);
 
     // &jsMooTools2 - Location of an alternative mootools javascript library
