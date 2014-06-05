@@ -2,7 +2,7 @@
 if(!defined('MODX_BASE_PATH')){die('What are you doing? Get out of here!');}
 
 // ajaxSearch version being executed
-define('AS_VERSION', '1.10.0');
+define('AS_VERSION', '1.10.1');
 // Path where ajaxSearch is installed
 define('AS_SPATH', 'assets/snippets/ajaxSearch/');
 //include snippet file
@@ -67,7 +67,7 @@ $cfg['language'] = isset($language) ? $language : (isset($__language) ? $__langu
 $cfg['ajaxSearch'] = isset($ajaxSearch) ? $ajaxSearch : (isset($__ajaxSearch) ? $__ajaxSearch : $dcfg['ajaxSearch']);
 // avoid the use of @FILE: prefix with ajax mode
 if ((substr($cfg['config'], 0, 6) == "@FILE:") && $cfg['ajaxSearch'])
-	return "<h3>AjaxSearch error: @FILE: prefix not allowed !<br />Check your config parameter or your config file name!</h3>";
+    return "<h3>AjaxSearch error: @FILE: prefix not allowed !<br />Check your config parameter or your config file name!</h3>";
 
 // &advSearch [ 'exactphrase' | 'allwords' | 'nowords' | 'oneword' ]
 // Advanced search:
