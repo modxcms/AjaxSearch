@@ -66,7 +66,7 @@ class AjaxSearchRequest {
             if ($this->dbg) $this->asUtil->dbgRecord("End of select");
             $results = $this->_appendTvs($records);
         }
-        $modx->db->freeResult($records);
+        mysql_free_result($records);
         return $results;
     }
     /*
