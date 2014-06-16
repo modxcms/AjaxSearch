@@ -372,4 +372,3 @@ class AjaxSearchInput {
         return strip_tags($text);
     }
 }
-?>
