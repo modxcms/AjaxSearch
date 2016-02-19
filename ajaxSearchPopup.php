@@ -33,7 +33,7 @@ if (isset($_POST['search'])) {
 
         define('MODX_API_MODE', true);
         include_once (MODX_MANAGER_PATH . 'includes/document.parser.class.inc.php');
-        $modx = new DocumentParser;
+        if(!is_object($modx)) $modx = new DocumentParser;
         $modx->db->connect();
         $modx->getSettings();
         startCMSSession();
